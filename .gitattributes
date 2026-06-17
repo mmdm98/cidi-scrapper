@@ -1,0 +1,14 @@
+# Normalizar saltos de línea al hacer commit
+* text=auto
+
+# Python y texto: LF en el repo
+*.py    text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.csv   text eol=lf
+*.json  text eol=lf
+
+# Archivos binarios: sin conversión
+*.png   binary
+*.jpg   binary
+*.exe   binary

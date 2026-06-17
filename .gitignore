@@ -1,0 +1,35 @@
+# ─── Credenciales — NUNCA subir ───────────────────────────────────────────────
+cidi_user_key.txt
+shpt_user_key.txt
+paths.txt
+
+# ─── Carpetas de datos del pipeline (temporales y outputs) ────────────────────
+# Se conservan las carpetas vacías (.gitkeep), pero no su contenido
+1_scrapped_html/*
+2_scrapped_csv/*
+3_filtered_data/*
+4_comments_scrapped_html/*
+5_comments_scrapped_csv/*
+6_comments_filtered_data/*
+!**/.gitkeep
+
+# ─── Datos históricos pesados ─────────────────────────────────────────────────
+data/*
+!data/.gitkeep
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ─── IDE / Editor ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+
+# ─── Claude Code (herramienta interna) ───────────────────────────────────────
+.claude/

@@ -1,0 +1,8 @@
+D:/ruta/a/cidi_user_key.txt
+D:/ruta/a/shpt_user_key.txt
+D:/ruta/al/proyecto/cidi/1_scrapped_html
+D:/ruta/al/proyecto/cidi/2_scrapped_csv
+D:/ruta/al/proyecto/cidi/3_filtered_data
+D:/ruta/al/proyecto/cidi/4_comments_scrapped_html
+D:/ruta/al/proyecto/cidi/5_comments_scrapped_csv
+D:/ruta/al/proyecto/cidi/6_comments_filtered_data
