@@ -6,3 +6,4 @@ D:/ruta/al/proyecto/cidi/3_filtered_data
 D:/ruta/al/proyecto/cidi/4_comments_scrapped_html
 D:/ruta/al/proyecto/cidi/5_comments_scrapped_csv
 D:/ruta/al/proyecto/cidi/6_comments_filtered_data
+D:/ruta/al/chromeBrowser/chromedriver-win64/chromedriver.exe

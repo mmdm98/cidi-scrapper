@@ -2,6 +2,7 @@
 cidi_user_key.txt
 shpt_user_key.txt
 paths.txt
+tx_credentials.txt
 
 # ─── Carpetas de datos del pipeline (temporales y outputs) ────────────────────
 # Se conservan las carpetas vacías (.gitkeep), pero no su contenido

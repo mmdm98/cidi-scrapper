@@ -1,19 +1,17 @@
 import requests
 import re
+from credentials import read_credentials
 
-TOKEN = "7587271823:AAH0IPahMLq7SZMhHg6UMpHDw2Z97iSiS8I"  # Reemplaza con tu token
-CHAT_ID = "1762109746"  # Reemplaza con tu chat ID (ver paso 3)
+_token, _chat_id = read_credentials('tx_credentials.txt')
+TOKEN    = _token   or ""
+CHAT_ID  = _chat_id or ""
 URL_BASE = f"https://api.telegram.org/bot{TOKEN}"
 ultimo_update_id = 0
 
 def alerta_error(mensaje, parse_mode="Markdown"):
-    """
-    Envía un mensaje a un bot de Telegram.
-
-    :param mensaje: Texto del mensaje a enviar
-    :param parse_mode: Formato del mensaje (Markdown, HTML o None)
-    :return: Respuesta de la API de Telegram
-    """
+    if not TOKEN:
+        print(f"[Telegram no configurado] {mensaje}")
+        return None
     url = f"{URL_BASE}/sendMessage"
     params = {
         "chat_id": CHAT_ID,

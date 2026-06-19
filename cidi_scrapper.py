@@ -13,6 +13,7 @@ from sharepoint             import *
 from client_info_scrapper   import *
 from file_destructor        import *
 from tx                     import *
+from config                 import *
 from datetime import datetime, timedelta
 
 # MAIN
@@ -24,7 +25,7 @@ paths_file = 'D:/Usuarios/mdelgadillo/Desktop/xCodes/xSources/cidi/paths.txt'
 # Read paths from the text file
 paths = read_paths_from_file(paths_file)
 
-if len(paths) == 8:
+if len(paths) >= 8:
     cidi_credentials_file       = paths[0]
     sharepoint_credentials_file = paths[1]
     folder_path                 = paths[2]
@@ -33,11 +34,9 @@ if len(paths) == 8:
     comment_folder_path         = paths[5]
     comment_output_folder       = paths[6]
     comment_filtered_folder     = paths[7]
+    chromedriver_path = paths[8] if len(paths) >= 9 else DEFAULT_CHROMEDRIVER_PATH
 else:
     print("Incorrect number of paths read from file. Check the content.")
-
-#opcion_seleccionada = mostrar_popup('IMPORTANT WARNING', '¿Borrar todo?')
-#print(f'Usted ha seleccionado borrar todo: {opcion_seleccionada}')
 
 deleting_paths_csv  = [2,5]
 deleting_paths_html = [3,6]
@@ -58,26 +57,13 @@ for extension, indices in extensiones.items():
 cidi_cuil, cidi_password = read_credentials(cidi_credentials_file)
 sharepoint_username, sharepoint_password = read_credentials(sharepoint_credentials_file)
 
-sharepoint_site_name              = 'PROTELEM-INDICADORES'
-sharepoint_base_path              = 'https://epeccba.sharepoint.com/'
-sharepoint_nested_folder          = 'Documentos compartidos/m_actividad_turnero_cidi'
-sharepoint_nested_folder_comments = 'Documentos compartidos/m_comentarios_turnero_cidi'
+sharepoint_site_name              = SHAREPOINT_SITE_NAME
+sharepoint_base_path              = SHAREPOINT_BASE_PATH
+sharepoint_nested_folder          = SHAREPOINT_FOLDER_TURNERO
+sharepoint_nested_folder_comments = SHAREPOINT_FOLDER_COMMENTS
 
 # Locking a el dia de la fecha
 current_date = datetime.today().date() - timedelta(days=1)
-
-# Dictionary of Centro de Atención IDs and descriptions
-# centros_de_atencion = {
-#     1825: 'EPEC CENTRO DE ATENCION COMERCIAL ESTE',
-#     1824: 'EPEC CENTRO DE ATENCION COMERCIAL NORTE',
-#     1823: 'EPEC CENTRO DE ATENCION COMERCIAL SUR',
-#     1766: 'EPEC CENTRO DE ATENCION COMERCIAL TERMINAL DE ÓMNIBUS',
-#     1826: 'EPEC CPC ARGUELLO - LOCAL 3'
-# }
-
-# centros_de_atencion = {
-#     1823: 'EPEC CENTRO DE ATENCION COMERCIAL SUR'
-# }
 
 centros_de_atencion = {
     # 1766: 'EPEC CENTRO DE ATENCION COMERCIAL TERMINAL DE ÓMNIBUS'
@@ -142,14 +128,14 @@ while menu_locker == 1:
     lake_or_local = input()
     if lake_or_local == '2':
         print("Attepting to connect ...")
-        fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date)
+        fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date, chromedriver_path)
         print("Downloaded data ...")
         convert_html_files_to_csv(folder_path, output_folder, 0)
         print("Filtering data...")
         merge_csv_files(output_folder, filtered_folder, current_date, 'TURNERO')
         download_comment = input("Download Comment Data? [Y] or [N]: ").upper()
         if download_comment == 'Y':
-            fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, current_date, current_date)
+            fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, current_date, current_date, chromedriver_path)
             print("Downloaded data ...")
             convert_html_files_to_csv(comment_folder_path, comment_output_folder, 1)
             print("Filtering data...")
@@ -171,7 +157,7 @@ while menu_locker == 1:
         print("Type the day you want to download (YYYY-MM-DD): ")
         current_date = input()
         print("Attepting to connect ...")
-        fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date)
+        fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date, chromedriver_path)
         print("Downloaded data ...")
         convert_html_files_to_csv(folder_path, output_folder, 0)
         print("Filtering data...")
@@ -180,7 +166,7 @@ while menu_locker == 1:
         print("Type the day you want to download (YYYY-MM-DD): ")
         current_date = input()
         print("Attepting to connect ...")
-        fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, current_date, current_date)
+        fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, current_date, current_date, chromedriver_path)
         print("Downloaded data ...")
         convert_html_files_to_csv(comment_folder_path, comment_output_folder, 1)
         print("Filtering data...")
@@ -203,12 +189,12 @@ while menu_locker == 1:
         for i in range(cantidad_de_fechas):
             fecha = input(f"Enter date {i + 1} (YYYY-MM-DD): ")
             array_de_fechas.append(fecha)
-        
+
         for fecha in array_de_fechas:
             current_date = fecha
             print(" ################################ FECHA " + fecha + " ################################")
             print("Attepting to connect ...")
-            fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date)
+            fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, current_date, current_date, chromedriver_path)
             print("Downloaded data ...")
             convert_html_files_to_csv(folder_path, output_folder, 0)
             print("Filtering data...")
@@ -226,11 +212,11 @@ while menu_locker == 1:
         comment_or_general = input(f"Enter 1 for data, 2 for comments: ")
         desde  = input(f"Enter date (YYYY-MM-DD): ")
         hasta  = input(f"Enter date (YYYY-MM-DD): ")
-        period = desde + "-" + hasta 
+        period = desde + "-" + hasta
         print(" ################### DESDE " + desde + " HASTA " + hasta + "#####################")
         print("Attepting to connect ...")
         if comment_or_general == "1":
-            fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, desde, hasta)
+            fetch_and_save_data(cidi_cuil, cidi_password, centros_de_atencion, folder_path, desde, hasta, chromedriver_path)
             print("Downloaded data ...")
             convert_html_files_to_csv(folder_path, output_folder, 0)
             print("Filtering data...")
@@ -240,7 +226,7 @@ while menu_locker == 1:
             upload_success = upload_file_to_sharepoint(sharepoint_username, sharepoint_password, sharepoint_site_name, sharepoint_base_path, sharepoint_nested_folder, filtered_folder)
 
         if comment_or_general == "2":
-            fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, desde, hasta)
+            fetch_and_save_comment_data(cidi_cuil, cidi_password, centros_de_atencion, comment_folder_path, desde, hasta, chromedriver_path)
             print("Downloaded data ...")
             convert_html_files_to_csv(comment_folder_path, comment_output_folder, 1)
             print("Filtering data...")
@@ -250,7 +236,7 @@ while menu_locker == 1:
             print("Uploading...")
             upload_success = upload_file_to_sharepoint(sharepoint_username, sharepoint_password, sharepoint_site_name, sharepoint_base_path, sharepoint_nested_folder, filtered_folder)
 
-        else: 
+        else:
             print(" o p c i o n  i n c o r r e c t a  h e r m a n o")
         print(" ################################################################ ")
         print("Exiting...")
