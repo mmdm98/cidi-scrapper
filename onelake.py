@@ -16,6 +16,10 @@ WORKSPACE_NAME     = "Protelem - Premium"
 DATA_PATH_CACs     = "LH_CIDI.Lakehouse/Files/CACs"
 DATA_PATH_COMMENTS = "LH_CIDI.Lakehouse/Files/CACs_Comments"
 
+# Type constants — usar siempre estas constantes en lugar de strings literales
+TYPE_CACS     = "CACS"
+TYPE_COMMENTS = "COMMENTS"
+
 def upload_file_to_directory(directory_client: DataLakeDirectoryClient, local_path: str, file_name: str):
     file_client = directory_client.get_file_client(file_name)
     # Opción 1: archivos chicos

@@ -9,7 +9,7 @@ def menu(telegram=0):
 
     if telegram == 1:
         # Print menu options
-        menu_app = '0. BORRAR TODO\n1. Upload data to SharePoint\n2. Download Data (yesterday)\n3. Download Data (specific date)\n4. Download Comment Data (specific date)\n5. Exit'
+        menu_app = '0. BORRAR TODO\n1. Upload data to SharePoint\n2. Download Data (yesterday)\n3. Download Data (specific date)\n4. Download Comment Data (specific date)\n5. Exit\n6. [DEV] Download multiple specific dates (Turnero)\n7. [DEV] Download date range — Turnero or Comments'
         return menu_app
     else:
 
@@ -81,4 +81,6 @@ def menu(telegram=0):
         print(menu_format.format("3. Download Data (specific date)"))
         print(menu_format.format("4. Download Comment Data (specific date)"))
         print(menu_format.format("5. Exit"))
+        print(menu_format.format("6. [DEV] Download multiple specific dates (Turnero)"))
+        print(menu_format.format("7. [DEV] Download date range — Turnero or Comments"))
 

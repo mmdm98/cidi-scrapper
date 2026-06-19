@@ -36,7 +36,7 @@ def mostrar_popup(titulo, mensaje):
     boton_seguir.pack(side=tk.LEFT, padx=20)
     
     # Botón 'No'
-    boton_no = tk.Button(ventana, text='Si', command=lambda: respuesta_opcion('Si'))
+    boton_no = tk.Button(ventana, text='No', command=lambda: respuesta_opcion('No'))
     boton_no.pack(side=tk.RIGHT, padx=20)
     
     resultado = None
@@ -45,6 +45,7 @@ def mostrar_popup(titulo, mensaje):
     return resultado
 
 
+# DEPRECATED — cambiar_directorio ya no se usa. borrar_archivos usa rutas absolutas.
 def cambiar_directorio(path):
     """Cambia al directorio especificado."""
     try:
@@ -58,14 +59,7 @@ def cambiar_directorio(path):
         print(f'Error al cambiar de directorio: {e}')
 
 def borrar_archivos(extension, path):
-    cambiar_directorio(path)
-    archivos = glob.glob(f'*.{extension}')
-    # if not archivos:
-    #     print(f'No se encontraron archivos con la extensión .{extension} en {path}')
-    # else:
-    #     print(f'Archivos encontrados con la extensión .{extension} en {path}:')
-    #     for archivo in archivos:
-    #         print(f'  {archivo}')
+    archivos = glob.glob(os.path.join(path, f'*.{extension}'))
     for archivo in archivos:
         try:
             os.remove(archivo)

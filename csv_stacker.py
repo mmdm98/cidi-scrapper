@@ -62,7 +62,7 @@ def merge_csv_files(csv_directory, output_folder, date, turnero_or_client):
     # Aplicar la clasificación
         merged_df['Datos_Particulares'] = merged_df['Comentarios'].apply(clasificar_regex)
         output_file = os.path.join(output_folder, f'CACs_Comments_{date}.csv')
-        cacs_or_comments = "COMM"
+        cacs_or_comments = "COMMENTS"
     elif turnero_or_client == 'TURNERO':
         output_file = os.path.join(output_folder, f'CACs_{date}.csv')
         cacs_or_comments = "CACS"
