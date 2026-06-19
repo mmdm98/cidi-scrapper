@@ -14,10 +14,14 @@ from client_info_scrapper   import *
 from file_destructor        import *
 from tx                     import *
 from config                 import *
+from logger                 import setup_logging
 from datetime import datetime, timedelta
+import logging
 
 # MAIN
 warnings.filterwarnings("ignore")
+setup_logging()
+logger = logging.getLogger(__name__)
 
 # Specify the path to the paths text file
 paths_file = 'D:/Usuarios/mdelgadillo/Desktop/xCodes/xSources/cidi/paths.txt'
@@ -36,7 +40,7 @@ if len(paths) >= 8:
     comment_filtered_folder     = paths[7]
     chromedriver_path = paths[8] if len(paths) >= 9 else DEFAULT_CHROMEDRIVER_PATH
 else:
-    print("Incorrect number of paths read from file. Check the content.")
+    logger.error("Incorrect number of paths read from file. Check the content.")
 
 deleting_paths_csv  = [2,5]
 deleting_paths_html = [3,6]
@@ -51,7 +55,7 @@ for extension, indices in extensiones.items():
         if index < len(paths):
             borrar_archivos(extension, paths[index])
         else:
-            print(f'Índice fuera de rango para archivos {extension.upper()}: {index}')
+            logger.warning('Índice fuera de rango para archivos %s: %s', extension.upper(), index)
 
 # Read CUIL and SHAREPOINT and password from the text file
 cidi_cuil, cidi_password = read_credentials(cidi_credentials_file)
@@ -248,7 +252,7 @@ while menu_locker == 1:
                 if index < len(paths):
                     borrar_archivos(extension, paths[index])
                 else:
-                    print(f'Índice fuera de rango para archivos {extension.upper()}: {index}')
+                    logger.warning('Índice fuera de rango para archivos %s: %s', extension.upper(), index)
     else:
         print("Try again, wrong option ...")
 

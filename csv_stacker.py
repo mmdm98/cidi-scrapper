@@ -1,8 +1,11 @@
 import os
 import glob
 import re
+import logging
 import pandas as pd
 from onelake import *
+
+logger = logging.getLogger(__name__)
 
 #########################################################################################
 # Diccionario de categorías con sus patrones asociados
@@ -23,7 +26,6 @@ categorias_regex = {
     "REGISTRO EN LA PAGINA WEB / ALTA CIDI": r"\bregistro\b|\bcidi\b|\balta.*web\b",
 }
 #########################################################################################
-# Función para clasificar usando regex
 def clasificar_regex(comentario):
     if pd.isna(comentario):
         return "SIN COMENTARIO"
@@ -55,8 +57,8 @@ def merge_csv_files(csv_directory, output_folder, date, turnero_or_client):
         cacs_or_comments = TYPE_CACS
 
     merged_df.to_csv(output_file, index=False)
-    print(f'Merged CSV file "{output_file}" has been created successfully.')
+    logger.info('Merged CSV file "%s" has been created successfully.', output_file)
 
     if cacs_or_comments == TYPE_CACS:
-        print(f'Uploading "{output_file}" to onelake . . .')
+        logger.info('Uploading "%s" to OneLake...', output_file)
         guardar_en_onelake(cacs_or_comments, f'CACs_{date}.csv', local_folder=output_folder)

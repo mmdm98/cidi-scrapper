@@ -1,29 +1,29 @@
-import os
+import logging
 
-# Function to read CUIL and password from text file
+logger = logging.getLogger(__name__)
+
+
 def read_credentials(file_path):
     try:
         with open(file_path, 'r') as file:
             lines = file.readlines()
             if len(lines) >= 2:
-                cuil = lines[0].strip()
-                password = lines[1].strip()
-                return cuil, password
+                return lines[0].strip(), lines[1].strip()
             else:
-                print(f"Error: File '{file_path}' does not contain enough lines.")
+                logger.error("File '%s' does not contain enough lines.", file_path)
                 return None, None
     except FileNotFoundError:
-        print(f"Error: File '{file_path}' not found.")
+        logger.error("File '%s' not found.", file_path)
         return None, None
     except Exception as e:
-        print(f"Error reading credentials from {file_path}: {e}")
+        logger.error("Error reading credentials from %s: %s", file_path, e)
         return None, None
- 
+
+
 def read_paths_from_file(file_path):
-    paths = []
     try:
         with open(file_path, 'r') as file:
-            paths = [line.strip() for line in file.readlines()]
+            return [line.strip() for line in file.readlines()]
     except Exception as e:
-        print(f"Error reading paths from {file_path}: {e}")
-    return paths
+        logger.error("Error reading paths from %s: %s", file_path, e)
+        return []

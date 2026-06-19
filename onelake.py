@@ -1,6 +1,9 @@
 from azure.storage.filedatalake import DataLakeServiceClient, DataLakeDirectoryClient
 from azure.identity import InteractiveBrowserCredential
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 ACCOUNT_NAME       = "onelake"
 WORKSPACE_NAME     = "Protelem - Premium"
@@ -25,17 +28,17 @@ def upload_file_to_directory(directory_client: DataLakeDirectoryClient, local_pa
 def guardar_en_onelake(cacs_or_comm: str, file_name: str, local_folder: str):
     data_path = _DATA_PATHS[cacs_or_comm]  # KeyError si se pasa un tipo inválido
 
-    print("Autorización de Credencial...")
+    logger.info("Autorización de Credencial...")
     credential = InteractiveBrowserCredential()
-    print("Autorización Exitosa...")
+    logger.info("Autorización Exitosa...")
 
     account_url = f"https://{ACCOUNT_NAME}.dfs.fabric.microsoft.com"
     service_client = DataLakeServiceClient(account_url, credential=credential)
     file_system_client = service_client.get_file_system_client(WORKSPACE_NAME)
 
-    print("\n Archivos en el Path de OneLake")
+    logger.debug("Archivos en el Path de OneLake (%s):", data_path)
     for path in file_system_client.get_paths(path=data_path):
-        print(f'{path.name} + {path.last_modified}\n')
+        logger.debug("  %s  %s", path.name, path.last_modified)
 
     directory_client = file_system_client.get_directory_client(data_path)
     upload_file_to_directory(
@@ -44,4 +47,4 @@ def guardar_en_onelake(cacs_or_comm: str, file_name: str, local_folder: str):
         file_name=file_name,
     )
 
-    print("Archivo subido con éxito!")
+    logger.info("Archivo subido con éxito!")

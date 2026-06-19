@@ -1,5 +1,6 @@
 import time
 import os
+import logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,6 +11,8 @@ from config import (
     DEFAULT_CHROMEDRIVER_PATH,
 )
 from tx import alerta_error
+
+logger = logging.getLogger(__name__)
 
 
 def _init_driver(chromedriver_path, page_load_timeout, user_agent=None):
@@ -50,12 +53,12 @@ def _login(driver, cuil, password):
         WebDriverWait(driver, 10).until(EC.url_contains('dashboard'))
 
         if 'dashboard' in driver.current_url:
-            print("Login successful!")
+            logger.info("Login successful!")
         else:
-            print("Login failed. Please check your credentials.")
+            logger.warning("Login failed. Please check your credentials.")
 
     except Exception as e:
-        print(f"An error occurred during login: {str(e)}")
+        logger.error("An error occurred during login: %s", str(e))
 
 
 def _open_tab(driver, url):
@@ -111,10 +114,10 @@ def fetch_cac_data(
             output_file = os.path.join(folder_path, filename)
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(page_source)
-            print(f"HTML content for '{descripcion}' saved to {output_file}")
+            logger.info("HTML content for '%s' saved to %s", descripcion, output_file)
 
         except Exception as e:
-            print(f"An error occurred for '{descripcion}': {str(e)}")
+            logger.error("An error occurred for '%s': %s", descripcion, str(e))
             alerta_error(f"An error occurred for '**{descripcion}**': {str(e)}")
             if save_on_error:
                 # Intenta recuperar lo que haya en la pestaña actual y cerrar las extra
@@ -131,11 +134,11 @@ def fetch_cac_data(
                     output_file = os.path.join(folder_path, filename)
                     with open(output_file, 'w', encoding='utf-8') as f:
                         f.write(page_source)
-                    print(f"HTML content for '{descripcion}' saved to {output_file}")
+                    logger.info("HTML content for '%s' saved to %s", descripcion, output_file)
                     alerta_error(f"HTML content for '**{descripcion}**' saved to {output_file}")
                 except Exception:
                     pass
 
     time.sleep(3)
     driver.quit()
-    print("Script execution completed.")
+    logger.info("Script execution completed.")

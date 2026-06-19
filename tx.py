@@ -1,6 +1,9 @@
 import requests
 import re
+import logging
 from credentials import read_credentials
+
+logger = logging.getLogger(__name__)
 
 _token, _chat_id = read_credentials('tx_credentials.txt')
 TOKEN    = _token   or ""
@@ -8,9 +11,10 @@ CHAT_ID  = _chat_id or ""
 URL_BASE = f"https://api.telegram.org/bot{TOKEN}"
 ultimo_update_id = 0
 
+
 def alerta_error(mensaje, parse_mode="Markdown"):
     if not TOKEN:
-        print(f"[Telegram no configurado] {mensaje}")
+        logger.warning("Telegram no configurado — mensaje suprimido: %s", mensaje)
         return None
     url = f"{URL_BASE}/sendMessage"
     params = {
@@ -34,9 +38,9 @@ def recibir_mensajes():
                 ultimo_update_id = update_id
                 chat_id = mensaje["message"]["chat"]["id"]
                 texto = mensaje["message"]["text"]
-                print(f"Mensaje recibido: {texto}")
+                logger.info("Mensaje recibido: %s", texto)
                 var = text_analysis(texto)
-                print(var)
+                logger.info("Análisis: %s", var)
                 responder_mensaje(chat_id, texto)
 
 def responder_mensaje(chat_id, mensaje):

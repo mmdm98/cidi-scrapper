@@ -1,8 +1,11 @@
 import os
 import json
 import csv
-from bs4 import BeautifulSoup
 import glob
+import logging
+from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 
 def convert_html_to_csv(html_content):
@@ -46,6 +49,6 @@ def convert_html_files_to_csv(html_directory, output_folder, Ns):
                 writer.writeheader()
                 writer.writerows(records)
 
-            print(f'CSV file "{csv_file}" has been created successfully.')
+            logger.info("CSV file '%s' has been created successfully.", csv_file)
         else:
-            print(f'No valid JSON data found in {html_file}. Skipping...')
+            logger.warning("No valid JSON data found in %s. Skipping...", html_file)

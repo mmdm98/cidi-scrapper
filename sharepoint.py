@@ -2,6 +2,10 @@ from azure.storage.filedatalake import DataLakeServiceClient, DataLakeDirectoryC
 from azure.identity import InteractiveBrowserCredential
 import requests
 import os
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def upload_file_to_sharepoint(username, password, site_name, base_path, nested_folder, local_folder):
     def get_last_modified_file(folder_path):
@@ -13,15 +17,15 @@ def upload_file_to_sharepoint(username, password, site_name, base_path, nested_f
 
     file_path = get_last_modified_file(local_folder)
     if not file_path:
-        print("No files found in the specified folder.")
+        logger.warning("No files found in the specified folder.")
         return False
 
-    print("Last modified file:", file_path)
+    logger.info("Last modified file: %s", file_path)
     file_name = os.path.basename(file_path)
 
-    print("Autorización de credencial...")
+    logger.info("Autorización de credencial...")
     credential = InteractiveBrowserCredential()
-    print("Autorización exitosa...")
+    logger.info("Autorización exitosa...")
 
     token = credential.get_token("https://graph.microsoft.com/.default").token
     headers = {
@@ -39,8 +43,8 @@ def upload_file_to_sharepoint(username, password, site_name, base_path, nested_f
     resp = requests.put(upload_url, headers=headers, data=content)
 
     if resp.status_code in (200, 201):
-        print("Archivo subido con éxito a SharePoint!")
+        logger.info("Archivo subido con éxito a SharePoint!")
         return True
     else:
-        print("Error subiendo a SharePoint:", resp.status_code, resp.text)
+        logger.error("Error subiendo a SharePoint: %s %s", resp.status_code, resp.text)
         return False
