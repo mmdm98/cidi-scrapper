@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------------------------------------
 # MENU
 #--------------------------------------------------------------------------------------------------------------------
-from colorama import init, Fore, Back, Style
+from colorama import init, Style
 
 
 
@@ -59,17 +59,6 @@ def menu(telegram=0):
 
         # Initialize colorama
         init()
-
-        black_chars = '´'
-        red_chars = '¶'
-
-        # for char in title:
-        #     if char in black_chars:
-        #         print(Fore.BLACK + char, end='')
-        #     elif char in red_chars:
-        #         print(Fore.RED + char, end='')
-        #     else:
-        #         print(char, end='')
 
         # Reset colors at the end
         print(Style.RESET_ALL)
