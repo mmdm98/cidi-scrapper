@@ -26,4 +26,4 @@ def delete_columns_in_csv(folder_path):
     print(f"CSV file '{output_csv_path}' with specified columns deleted has been created successfully.")
     print("Guardando en Onelake . . .")
 
-    guardar_en_onelake("COMMENTS", os.path.basename(output_csv_path))
+    guardar_en_onelake(TYPE_COMMENTS, os.path.basename(output_csv_path), local_folder=folder_path)

@@ -2,8 +2,8 @@ import os
 import glob
 import re
 import pandas as pd
-from datetime import datetime, timedelta
 from onelake import *
+
 #########################################################################################
 # Diccionario de categorías con sus patrones asociados
 categorias_regex = {
@@ -27,7 +27,7 @@ categorias_regex = {
 def clasificar_regex(comentario):
     if pd.isna(comentario):
         return "SIN COMENTARIO"
-    
+
     comentario = comentario.lower()
     for categoria, patron in categorias_regex.items():
         if re.search(patron, comentario, re.IGNORECASE):
@@ -35,44 +35,28 @@ def clasificar_regex(comentario):
     return "NO CLASIFICADO"
 
 def merge_csv_files(csv_directory, output_folder, date, turnero_or_client):
-    # Ensure the output folder exists, create it if necessary
     os.makedirs(output_folder, exist_ok=True)
 
-    # List all CSV files in the directory
     csv_files = glob.glob(os.path.join(csv_directory, '*.csv'))
 
-    # Initialize an empty list to store all dataframes
     all_data = []
-
-    # Read each CSV file and append to the list
     for csv_file in csv_files:
         df = pd.read_csv(csv_file)
         all_data.append(df)
 
-    # Concatenate all dataframes into one
     merged_df = pd.concat(all_data, ignore_index=True)
 
-    # Generate a timestamp
-    # timestamp = datetime.now().strftime('%Y-%m-%d')
-
-    # timestamp = datetime.today().date() - timedelta(days=1)
-
-    # Define the output file path
-    if   turnero_or_client == 'COMENTARIOS':
-    # Aplicar la clasificación
+    if turnero_or_client == 'COMENTARIOS':
         merged_df['Datos_Particulares'] = merged_df['Comentarios'].apply(clasificar_regex)
         output_file = os.path.join(output_folder, f'CACs_Comments_{date}.csv')
-        cacs_or_comments = "COMMENTS"
+        cacs_or_comments = TYPE_COMMENTS
     elif turnero_or_client == 'TURNERO':
         output_file = os.path.join(output_folder, f'CACs_{date}.csv')
-        cacs_or_comments = "CACS"
+        cacs_or_comments = TYPE_CACS
 
-    # Write merged dataframe to CSV
     merged_df.to_csv(output_file, index=False)
-
     print(f'Merged CSV file "{output_file}" has been created successfully.')
 
-    if cacs_or_comments == "CACS":
-        print(F'Uploading "{output_file}" to onelake . . .')
-        guardar_en_onelake(cacs_or_comments, f'CACs_{date}.csv')
-
+    if cacs_or_comments == TYPE_CACS:
+        print(f'Uploading "{output_file}" to onelake . . .')
+        guardar_en_onelake(cacs_or_comments, f'CACs_{date}.csv', local_folder=output_folder)
