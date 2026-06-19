@@ -1,75 +1,54 @@
-#--------------------------------------------------------------------------------------------------------------------
-# MENU
-#--------------------------------------------------------------------------------------------------------------------
-from colorama import init, Style
+from colorama import init, Fore, Back, Style
 
+_W = 56  # ancho de columna de opciones
 
 
 def menu(telegram=0):
-
     if telegram == 1:
-        # Print menu options
-        menu_app = '0. BORRAR TODO\n1. Upload data to SharePoint\n2. Download Data (yesterday)\n3. Download Data (specific date)\n4. Download Comment Data (specific date)\n5. Exit\n6. [DEV] Download multiple specific dates (Turnero)\n7. [DEV] Download date range — Turnero or Comments'
-        return menu_app
-    else:
+        return (
+            '0. Borrar todo\n'
+            '1. Subir datos a SharePoint\n'
+            '2. Descargar datos (ayer)\n'
+            '3. Descargar datos (fecha específica)\n'
+            '4. Descargar comentarios (fecha específica)\n'
+            '5. Salir\n'
+            f'{"─── DEV " + "─" * (_W - 8)}\n'
+            '6. Descargar múltiples fechas (Turnero)\n'
+            '7. Descargar rango de fechas (Turnero o Comentarios)'
+        )
 
-        # ANSI escape code for green background and white text
-        menu_format = "\033[42m\033[97m {} \033[0m"
+    import sys
+    sys.stdout.reconfigure(encoding='utf-8')
+    init()
 
-        # Multiline ASCII art title
-        title = r"""
-    
+    # ── Header ───────────────────────────────────────────────────
+    border = "═" * _W
+    print()
+    print(Fore.CYAN + Style.BRIGHT + f"╔{border}╗")
+    print(f"║{'CIDI SCRAPPER  ─  EPEC':^{_W}}║")
+    print(f"║{'Sistema de Atención Comercial':^{_W}}║")
+    print(f"╚{border}╝" + Style.RESET_ALL)
+    print()
 
-    ´´´´´´´´´´´´´´´´´´´ ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´´´´`
-    ´´´´´´´´´´´´´´´´´¶¶¶¶¶¶´´´´´´´´´´´´´¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´
-    ´´´´´´´´´´´´´´¶¶¶¶´´´´´´´´´´´´´´´´´´´´´´´¶¶¶¶´´´´´´´´´´´´´´
-    ´´´´´´´´´´´´´¶¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´´´´´´´´´´´
-    ´´´´´´´´´´´´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´´´´´´´´´´
-    ´´´´´´´´´´´¶¶´´´´´´´´´´´´´´´´´´´´´`´´´´´´´´´´´¶¶´´´´´´´´´´`
-    ´´´´´´´´´´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´´´´´´´´´
-    ´´´´´´´´´´¶¶´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´¶¶´´´´´´´´´´
-    ´´´´´´´´´´¶¶´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´¶´´´´´´´´´´
-    ´´´´´´´´´´¶¶´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´¶´´´´´´´´´´
-    ´´´´´´´´´´¶¶´´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´¶¶´´´´´´´´´´
-    ´´´´´´´´´´¶¶´´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´¶¶´´´´´´´´´´
-    ´´´´´´´´´´´¶¶´¶¶´´´¶¶¶¶¶¶¶¶´´´´´¶¶¶¶¶¶¶¶´´´¶¶´¶¶´´´´´´´´´´´
-    ´´´´´´´´´´´´¶¶¶¶´¶¶¶¶¶¶¶¶¶¶´´´´´¶¶¶¶¶¶¶¶¶¶´¶¶¶¶¶´´´´´´´´´´´
-    ´´´´´´´´´´´´´¶¶¶´¶¶¶¶¶¶¶¶¶¶´´´´´¶¶¶¶¶¶¶¶¶¶´¶¶¶´´´´´´´´´´´´´
-    ´´´´¶¶¶´´´´´´´¶¶´´¶¶¶¶¶¶¶¶´´´´´´´¶¶¶¶¶¶¶¶¶´´¶¶´´´´´´¶¶¶¶´´´
-    ´´´¶¶¶¶¶´´´´´¶¶´´´¶¶¶¶¶¶¶´´´¶¶¶´´´¶¶¶¶¶¶¶´´´¶¶´´´´´¶¶¶¶¶¶´´
-    ´´¶¶´´´¶¶´´´´¶¶´´´´´¶¶¶´´´´¶¶¶¶¶´´´´¶¶¶´´´´´¶¶´´´´¶¶´´´¶¶´´
-    ´¶¶¶´´´´¶¶¶¶´´¶¶´´´´´´´´´´¶¶¶¶¶¶¶´´´´´´´´´´¶¶´´¶¶¶¶´´´´¶¶¶´
-    ¶¶´´´´´´´´´¶¶¶¶¶¶¶¶´´´´´´´¶¶¶¶¶¶¶´´´´´´´¶¶¶¶¶¶¶¶¶´´´´´´´´¶¶
-    ¶¶¶¶¶¶¶¶¶´´´´´¶¶¶¶¶¶¶¶´´´´¶¶¶¶¶¶¶´´´´¶¶¶¶¶¶¶¶´´´´´´¶¶¶¶¶¶¶¶
-    ´´¶¶¶¶´¶¶¶¶¶´´´´´´¶¶¶¶¶´´´´´´´´´´´´´´¶¶¶´¶¶´´´´´¶¶¶¶¶¶´¶¶¶´
-    ´´´´´´´´´´¶¶¶¶¶¶´´¶¶¶´´¶¶´´´´´´´´´´´¶¶´´¶¶¶´´¶¶¶¶¶¶´´´´´´´´
-    ´´´´´´´´´´´´´´¶¶¶¶¶¶´¶¶´¶¶¶¶¶¶¶¶¶¶¶´¶¶´¶¶¶¶¶¶´´´´´´´´´´´´´´
-    ´´´´´´´´´´´´´´´´´´¶¶´¶¶´¶´¶´¶´¶´¶´¶´¶´¶´¶¶´´´´´´´´´´´´´´´´´
-    ´´´´´´´´´´´´´´´´¶¶¶¶´´¶´¶´¶´¶´¶´¶´¶´¶´´´¶¶¶¶¶´´´´´´´´´´´´´´
-    ´´´´´´´´´´´´¶¶¶¶¶´¶¶´´´¶¶¶¶¶¶¶¶¶¶¶¶¶´´´¶¶´¶¶¶¶¶´´´´´´´´´´´´
-    ´´´´¶¶¶¶¶¶¶¶¶¶´´´´´¶¶´´´´´´´´´´´´´´´´´¶¶´´´´´´¶¶¶¶¶¶¶¶¶´´´´
-    ´´´¶¶´´´´´´´´´´´¶¶¶¶¶¶¶´´´´´´´´´´´´´¶¶¶¶¶¶¶¶´´´´´´´´´´¶¶´´´
-    ´´´´¶¶¶´´´´´¶¶¶¶¶´´´´´¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶´´´´´¶¶¶¶¶´´´´´¶¶¶´´´´
-    ´´´´´´¶¶´´´¶¶¶´´´´´´´´´´´¶¶¶¶¶¶¶¶¶´´´´´´´´´´´¶¶¶´´´¶¶´´´´´´
-    ´´´´´´¶¶´´¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶´´¶¶´´´´´´
-    ´´´´´´´¶¶¶¶´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´¶¶¶¶´´´´´´´
+    # ── Opciones principales ─────────────────────────────────────
+    for opt in [
+        "  0.  Borrar todo",
+        "  1.  Subir datos a SharePoint",
+        "  2.  Descargar datos (ayer)",
+        "  3.  Descargar datos (fecha específica)",
+        "  4.  Descargar comentarios (fecha específica)",
+        "  5.  Salir",
+    ]:
+        print(Back.GREEN + Fore.WHITE + Style.BRIGHT + opt.ljust(_W) + Style.RESET_ALL)
 
+    # ── Sección DEV ──────────────────────────────────────────────
+    print()
+    print(Fore.YELLOW + Style.BRIGHT + "─── DEV " + "─" * (_W - 8) + Style.RESET_ALL)
 
-    """
+    for opt in [
+        "  6.  Descargar múltiples fechas (Turnero)",
+        "  7.  Descargar rango de fechas (Turnero o Comentarios)",
+    ]:
+        print(Back.YELLOW + Fore.BLACK + opt.ljust(_W) + Style.RESET_ALL)
 
-        # Initialize colorama
-        init()
-
-        # Reset colors at the end
-        print(Style.RESET_ALL)
-
-        # Print menu options
-        print(menu_format.format("0. BORRAR TODO"))
-        print(menu_format.format("1. Upload data to SharePoint"))
-        print(menu_format.format("2. Download Data (yesterday)"))
-        print(menu_format.format("3. Download Data (specific date)"))
-        print(menu_format.format("4. Download Comment Data (specific date)"))
-        print(menu_format.format("5. Exit"))
-        print(menu_format.format("6. [DEV] Download multiple specific dates (Turnero)"))
-        print(menu_format.format("7. [DEV] Download date range — Turnero or Comments"))
-
+    print()
